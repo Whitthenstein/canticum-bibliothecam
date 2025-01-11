@@ -1,4 +1,4 @@
-import { Calendar, Home, LibraryBig, Settings, UsersRound, Key } from "lucide-react";
+import { /*Calendar,*/ Home, LibraryBig, /*Settings,*/ UsersRound, Key } from "lucide-react";
 
 import {
   Sidebar,

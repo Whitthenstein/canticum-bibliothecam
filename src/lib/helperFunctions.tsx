@@ -17,13 +17,17 @@ export const buildSearchString = (stringChunksArray: string[]) => {
 export const getSongsResultsListArray = (songs: SelectSong[]) => {
   return songs.map((song) => {
     const icons = [{ Icon: FILE_TYPES_MAP["pdfFile"], iconText: TRANSLATIONS.pt["pdfFile"] }];
-    song.musescoreFile &&
+
+    if (song.musescoreFile) {
       icons.push({
         Icon: FILE_TYPES_MAP["musescoreFile"],
         iconText: TRANSLATIONS.pt["musescoreFile"]
       });
-    song.audioFile &&
+    }
+
+    if (song.audioFile) {
       icons.push({ Icon: FILE_TYPES_MAP["audioFile"], iconText: TRANSLATIONS.pt["audioFile"] });
+    }
 
     return (
       <li key={`${song.ID}-${song.title}`}>
@@ -36,10 +40,14 @@ export const getSongsResultsListArray = (songs: SelectSong[]) => {
 export const getAuthorsResultsListArray = (authors: SelectAuthor[]) => {
   return authors.map((author) => {
     const Icons = [];
-    author.isComposer &&
+
+    if (author.isComposer) {
       Icons.push({ Icon: AUTHOR_TYPES_MAP.Composer, iconText: TRANSLATIONS.pt.Composer });
-    author.isLyricist &&
+    }
+
+    if (author.isLyricist) {
       Icons.push({ Icon: AUTHOR_TYPES_MAP.Lyricist, iconText: TRANSLATIONS.pt.Lyricist });
+    }
 
     return (
       <li key={`${author.ID}-${author.name}`} className="py-1">

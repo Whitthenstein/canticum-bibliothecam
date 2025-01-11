@@ -1,10 +1,3 @@
-"use client";
-
-import Image from "next/image";
-
-import { AppSidebar } from "@/components/AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-
 export default function MainLayout({
   children
 }: Readonly<{

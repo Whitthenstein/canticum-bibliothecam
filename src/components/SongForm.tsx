@@ -72,9 +72,9 @@ const getFormSchema = (isEditingSong: boolean) => {
   });
 };
 
-type Props = {
+interface Props {
   songInfo?: { song: SelectSong; authors: SelectAuthorOfSong[] };
-};
+}
 
 export function SongForm({ songInfo }: Props) {
   const { toast } = useToast();
@@ -135,7 +135,11 @@ export function SongForm({ songInfo }: Props) {
     }
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields,
+    append
+    // remove
+  } = useFieldArray({
     name: "otherAuthors",
     control: form.control
   });
@@ -180,7 +184,7 @@ export function SongForm({ songInfo }: Props) {
 
   const handleOnChangeFile = (
     event: ChangeEvent<HTMLInputElement>,
-    onChange: (...event: any[]) => void
+    onChange: (...event: unknown[]) => void
   ) => onChange(event.target.files && event.target.files[0]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -194,8 +198,15 @@ export function SongForm({ songInfo }: Props) {
     // setup Dialog Popup
     const filesToProcess: string[] = [FILE_TYPES.PDF]; // pdf file is mandatory
     const finishedProcessedFiles: string[] = [];
-    musescoreFile && filesToProcess.push(FILE_TYPES.MUSESCORE);
-    audioFile && filesToProcess.push(FILE_TYPES.AUDIO);
+
+    if (musescoreFile) {
+      filesToProcess.push(FILE_TYPES.MUSESCORE);
+    }
+
+    if (audioFile) {
+      filesToProcess.push(FILE_TYPES.AUDIO);
+    }
+
     setFileTypesToProcess(new Set(filesToProcess));
 
     setOpenedDialog(true);
@@ -446,6 +457,7 @@ export function SongForm({ songInfo }: Props) {
         <FormField
           control={form.control}
           name="pdfFile"
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render={({ field: { value, onChange, ...fieldProps } }) => (
             <FormItem>
               <FormLabel>PDF *</FormLabel>
@@ -466,6 +478,7 @@ export function SongForm({ songInfo }: Props) {
         <FormField
           control={form.control}
           name="musescoreFile"
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render={({ field: { value, onChange, ...fieldProps } }) => (
             <FormItem>
               <FormLabel>Musescore</FormLabel>
@@ -485,6 +498,7 @@ export function SongForm({ songInfo }: Props) {
         <FormField
           control={form.control}
           name="audioFile"
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render={({ field: { value, onChange, ...fieldProps } }) => (
             <FormItem>
               <FormLabel>{TRANSLATIONS.pt.audio}</FormLabel>

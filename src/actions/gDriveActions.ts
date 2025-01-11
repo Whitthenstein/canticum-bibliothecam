@@ -1,7 +1,6 @@
 "use server";
 
 import { gAuth, gDrive } from "@/db";
-import { drive_v3 } from "googleapis";
 
 const STORAGE_FOLDER_ID = "1NoIiPe0ZWwaD2CPdsEQG1xRAoxSPG1Ku";
 
@@ -82,11 +81,11 @@ export const getFile = async (fileId: string) => {
   return result;
 };
 
-type GetFileNamesResponse = {
+interface GetFileNamesResponse {
   pdfFileName: string | null | undefined;
   musescoreFileName: string | null | undefined;
   audioFileName: string | null | undefined;
-};
+}
 export const getFileNames = async (payload: {
   pdfFileID: string | null;
   musescoreFileID: string | null;

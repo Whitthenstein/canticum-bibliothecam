@@ -7,16 +7,16 @@ import { TRANSLATIONS } from "@/lib/translations";
 
 import React from "react";
 
-const Songs = async (props: {
+export default async function Authors(props: {
   searchParams?: Promise<{
     query?: string;
     page?: string;
   }>;
-}) => {
+}) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
 
-  const authors = !!query ? await getAuthorsWithQuery(query) : await getAuthors();
+  const authors = query ? await getAuthorsWithQuery(query) : await getAuthors();
 
   return (
     <div className="flex w-full flex-col items-center justify-center py-14">
@@ -26,6 +26,4 @@ const Songs = async (props: {
       </ul>
     </div>
   );
-};
-
-export default Songs;
+}

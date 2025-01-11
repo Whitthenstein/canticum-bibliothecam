@@ -4,9 +4,9 @@ import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/compo
 import { SelectAuthor } from "@/db/schema";
 import { AuthorForm } from "./AuthorForm";
 
-type Props = {
+interface Props {
   author: SelectAuthor;
-};
+}
 
 export function EditAuthor({ author }: Props) {
   return (

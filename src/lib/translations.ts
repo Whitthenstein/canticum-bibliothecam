@@ -1,4 +1,4 @@
-type TranslationLanguageObject = {
+interface TranslationLanguageObject {
   Composer: string;
   Lyricist: string;
   pdfFile: string;
@@ -59,7 +59,7 @@ type TranslationLanguageObject = {
   savingMusescoreFile: string;
   savingAudioFile: string;
   savingSongInDatabase: string;
-};
+}
 
 const ENGLISH: TranslationLanguageObject = {
   Composer: "Composer",

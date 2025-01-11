@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { type InputProps } from "./input";
 import { cn } from "@/lib/utils";
 
-type Option = {
+interface Option {
   label: string;
   value: string;
-};
+}
 
 type SelectTagInputProps = Omit<InputProps, "value" | "onChange"> & {
   value: string[];

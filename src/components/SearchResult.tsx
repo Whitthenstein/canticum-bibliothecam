@@ -1,14 +1,13 @@
 import React, { ReactNode } from "react";
 import { Badge } from "./ui/badge";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip";
-import LinkButton from "./LinkButton";
 import Link from "next/link";
 
-type Props = {
+interface Props {
   text: string;
   Icons: { Icon: ReactNode; iconText: string }[];
   urlPath?: string;
-};
+}
 
 const SearchResultBody = ({ text, Icons }: Props) => {
   return (

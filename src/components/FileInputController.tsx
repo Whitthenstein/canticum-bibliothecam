@@ -3,16 +3,16 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { TRANSLATIONS } from "@/lib/translations";
 
-type Props = {
+interface Props {
   originalFileName: string | null | undefined;
-  fieldProps?: any;
+  fieldProps?: Record<string, unknown>;
   fileType: string;
   handleOnChangeFile: (
     event: ChangeEvent<HTMLInputElement>,
-    onChange: (...event: any[]) => void
+    onChange: (...event: unknown[]) => void
   ) => void;
-  onChange: (...event: any[]) => void;
-};
+  onChange: (...event: unknown[]) => void;
+}
 
 const FileInputController = ({
   originalFileName,
@@ -40,7 +40,7 @@ const FileInputController = ({
         type="button"
         className="w-[50%]"
         variant={"secondary"}
-        onClick={(e) => {
+        onClick={() => {
           setWillAddNewFile(true);
         }}
       >

@@ -8,7 +8,7 @@ import { TRANSLATIONS } from "@/lib/translations";
 import Link from "next/link";
 import { ReactNode } from "react";
 
-const page = async ({ params }: { params: Promise<{ songId: string }> }) => {
+export default async function Song({ params }: { params: Promise<{ songId: string }> }) {
   const { songId } = await params;
   const song = await getSongById({ songId: songId });
   const songAuthors = await getSongAuthorsBySongID({ songId: songId });
@@ -158,6 +158,4 @@ const page = async ({ params }: { params: Promise<{ songId: string }> }) => {
       </div>
     </Sheet>
   );
-};
-
-export default page;
+}

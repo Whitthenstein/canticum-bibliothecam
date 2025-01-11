@@ -2,14 +2,9 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { SelectAuthor } from "@/db/schema";
 import { useEffect } from "react";
-import {
-  FieldArrayWithId,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
-  UseFormRegister
-} from "react-hook-form";
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from "react-hook-form";
 
-type Props = {
+interface Props {
   otherAuthors: SelectAuthor[];
   fields: FieldArrayWithId<
     {
@@ -51,25 +46,9 @@ type Props = {
     "otherAuthors"
   >;
   remove: UseFieldArrayRemove;
-  register: UseFormRegister<{
-    title: string;
-    composers: string;
-    otherAuthors: {
-      ID: string;
-      name: string;
-      credit: string;
-    }[];
-    pdfFile: File;
-    subtitle?: string | undefined;
-    lyricists?: string | undefined;
-    lyrics?: string | undefined;
-    details?: string | undefined;
-    musescoreFile?: File | undefined;
-    audioFile?: File | undefined;
-  }>;
-};
+}
 
-const OtherAuthorsInfo = ({ fields, register, otherAuthors, append }: Props) => {
+const OtherAuthorsInfo = ({ fields, otherAuthors, append }: Props) => {
   useEffect(() => {
     if (otherAuthors.length === 0) {
       return;

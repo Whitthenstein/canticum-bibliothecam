@@ -38,7 +38,9 @@ const DialogContent = React.forwardRef<
   }
 >(({ className, children, onClose, automaticClose, shouldClose, ...props }, ref) => {
   React.useEffect(() => {
-    automaticClose && shouldClose && onClose && setTimeout(() => onClose(), 1000);
+    if (automaticClose && shouldClose && onClose) {
+      setTimeout(() => onClose(), 1000);
+    }
   }, [automaticClose, shouldClose, onClose]);
 
   return (

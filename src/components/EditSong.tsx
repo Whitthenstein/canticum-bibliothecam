@@ -1,12 +1,12 @@
 "use client";
 
 import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { SelectAuthor, SelectAuthorOfSong, SelectSong } from "@/db/schema";
+import { SelectAuthorOfSong, SelectSong } from "@/db/schema";
 import { SongForm } from "./SongForm";
 
-type Props = {
+interface Props {
   songInfo?: { song: SelectSong; authors: SelectAuthorOfSong[] };
-};
+}
 
 export function EditSong({ songInfo }: Props) {
   return (

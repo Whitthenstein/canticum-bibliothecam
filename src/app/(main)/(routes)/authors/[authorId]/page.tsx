@@ -7,14 +7,19 @@ import { AUTHOR_TYPES } from "@/db/schema";
 import { getSongsResultsListArray } from "@/lib/helperFunctions";
 import { TRANSLATIONS } from "@/lib/translations";
 
-const page = async ({ params }: { params: Promise<{ authorId: string }> }) => {
+export default async function Author({ params }: { params: Promise<{ authorId: string }> }) {
   const { authorId } = await params;
   const author = await getAuthorByID({ authorID: authorId });
   const authorSongs = await getSongsByAuthorID({ authorID: authorId });
 
   const authorTypes: string[] = [];
-  author.isComposer && authorTypes.push(TRANSLATIONS.pt[AUTHOR_TYPES.COMPOSER]);
-  author.isLyricist && authorTypes.push(TRANSLATIONS.pt[AUTHOR_TYPES.LYRICIST]);
+  if (author.isComposer) {
+    authorTypes.push(TRANSLATIONS.pt[AUTHOR_TYPES.COMPOSER]);
+  }
+  if (author.isLyricist) {
+    authorTypes.push(TRANSLATIONS.pt[AUTHOR_TYPES.LYRICIST]);
+  }
+
   const authorTypeInfo =
     authorTypes.length === 1
       ? authorTypes[0]
@@ -51,6 +56,4 @@ const page = async ({ params }: { params: Promise<{ authorId: string }> }) => {
       </div>
     </Sheet>
   );
-};
-
-export default page;
+}

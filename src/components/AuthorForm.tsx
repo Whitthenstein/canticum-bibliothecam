@@ -39,9 +39,9 @@ const formSchema = z.object({
   biography: z.string().trim()
 });
 
-type Props = {
+interface Props {
   author?: SelectAuthor;
-};
+}
 
 export const AuthorForm = ({ author }: Props) => {
   const { toast } = useToast();
@@ -52,8 +52,12 @@ export const AuthorForm = ({ author }: Props) => {
   if (!author) {
     defaultAuthorTypes.push(AUTHOR_TYPES.COMPOSER);
   } else {
-    author.isComposer && defaultAuthorTypes.push(AUTHOR_TYPES.COMPOSER);
-    author.isLyricist && defaultAuthorTypes.push(AUTHOR_TYPES.LYRICIST);
+    if (author.isComposer) {
+      defaultAuthorTypes.push(AUTHOR_TYPES.COMPOSER);
+    }
+    if (author.isLyricist) {
+      defaultAuthorTypes.push(AUTHOR_TYPES.LYRICIST);
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({

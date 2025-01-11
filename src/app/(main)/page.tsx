@@ -7,12 +7,12 @@ import SearchBox from "@/components/SearchBox";
 import { getAuthorsResultsListArray, getSongsResultsListArray } from "@/lib/helperFunctions";
 import { TRANSLATIONS } from "@/lib/translations";
 
-export const Home = async (props: {
+export default async function Home(props: {
   searchParams?: Promise<{
     query?: string;
     page?: string;
   }>;
-}) => {
+}) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   // const currentPage = Number(searchParams?.page) || 1;
@@ -31,6 +31,4 @@ export const Home = async (props: {
       )}
     </div>
   );
-};
-
-export default Home;
+}

@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 import { TRANSLATIONS } from "@/lib/translations";
 import AnimatedLoadingCircle from "@/components/AnimatedLoadingCircle";
 
-type UploadProcessComponentProps = {
+interface UploadProcessComponentProps {
   isWaiting: boolean;
   isProcessing: boolean;
   isFinished: boolean;
   text: string;
-};
+}
 
 const UploadProcessComponent = ({
   isWaiting,

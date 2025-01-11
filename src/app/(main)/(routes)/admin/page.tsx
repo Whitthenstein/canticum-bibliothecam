@@ -14,7 +14,7 @@ import AnimatedLoadingCircle from "@/components/AnimatedLoadingCircle";
 import { Eye, EyeClosed } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-const Admin = () => {
+export default function Admin() {
   const [isSubmittingPassword, setIsSubmittingPassword] = useState(false);
   const [inputtedPassword, setInputtedPassword] = useState("");
   const { isAuthenticated, submitPasswordAndCheck } = useAdminLogin();
@@ -88,6 +88,4 @@ const Admin = () => {
       </Tabs>
     </div>
   );
-};
-
-export default Admin;
+}

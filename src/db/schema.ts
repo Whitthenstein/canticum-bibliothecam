@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { sql } from "drizzle-orm";
-import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const AUTHOR_TYPES = {
   COMPOSER: "Composer",
@@ -84,7 +84,7 @@ export type SelectSong = typeof songsTable.$inferSelect;
 export type InsertDiscographyEntry = typeof discographyTable.$inferInsert;
 export type SelectDiscographyEntry = typeof discographyTable.$inferSelect;
 
-export type SelectAuthorOfSong = {
+export interface SelectAuthorOfSong {
   ID: typeof authorsTable.$inferSelect.ID;
   name: typeof authorsTable.$inferSelect.name;
   isComposer: typeof authorsTable.$inferSelect.isComposer;
@@ -93,4 +93,4 @@ export type SelectAuthorOfSong = {
   isMusicAuthor: typeof discographyTable.$inferSelect.isMusicAuthor;
   isLyricsAuthor: typeof discographyTable.$inferSelect.isLyricsAuthor;
   credit: typeof discographyTable.$inferSelect.credit;
-};
+}
