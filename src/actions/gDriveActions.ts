@@ -2,7 +2,7 @@
 
 import { gAuth, gDrive } from "@/db";
 
-const STORAGE_FOLDER_ID = "1NoIiPe0ZWwaD2CPdsEQG1xRAoxSPG1Ku";
+const STORAGE_FOLDER_ID = process.env.GDRIVE_STORAGE_FOLDER_ID!;
 
 export const getAllFiles = async () => {
   const res = await gDrive.files.list({
