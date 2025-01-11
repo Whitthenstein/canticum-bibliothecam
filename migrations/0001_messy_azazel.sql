@@ -1,0 +1,1 @@
+ALTER TABLE `songs` RENAME COLUMN "mp3_file" TO "audio_file";
