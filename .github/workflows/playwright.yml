@@ -15,8 +15,8 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install
-      - name: Install Turso
-        run: curl -sSfL https://get.tur.so/install.sh | bash
+      # - name: Install Turso
+      #   run: curl -sSfL https://get.tur.so/install.sh | bash
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
       - name: Build the app
