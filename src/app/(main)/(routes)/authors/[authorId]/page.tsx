@@ -36,11 +36,11 @@ export default async function Author({ params }: { params: Promise<{ authorId: s
         <h2 className="text-2xl">{authorTypeInfo}</h2>
         <Separator className="my-4" />
         {author.biography && (
-          <>
+          <div className="flex w-full flex-col">
             <h3 className="text-xl">{TRANSLATIONS.pt.biography}</h3>
-            <p className="text-sm">{author.biography}</p>
+            <p className="whitespace-pre text-wrap break-normal text-sm">{author.biography}</p>
             <Separator className="my-4" />
-          </>
+          </div>
         )}
         {/* {author} */}
         <h3 className="text-xl">{TRANSLATIONS.pt.songs}</h3>

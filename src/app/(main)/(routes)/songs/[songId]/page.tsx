@@ -98,19 +98,6 @@ export default async function Song({ params }: { params: Promise<{ songId: strin
             )}
             {otherAuthors.length > 0 && (
               <div className="flex w-full flex-col">
-                {/* {`${TRANSLATIONS.pt.otherAuthors}: `}
-              {otherAuthors.length === 1 ? (
-                <Link href={`/authors/${otherAuthors[0].ID}`}>{otherAuthors[0].name}</Link>
-              ) : (
-                otherAuthors.reduce((acc: ReactNode[], author, i) => {
-                  acc.push(<Link href={`/authors/${author.ID}`}>{author.name}</Link>);
-
-                  if (i < otherAuthors.length - 1) {
-                    acc.push(", ");
-                  }
-                  return acc;
-                }, [])
-              )} */}
                 {otherAuthors.map((author) => (
                   <div key={author.ID} className="flex w-full flex-row justify-end">
                     <p className="text-sm">{`${author.credit}: ${author.name}`}</p>
@@ -142,18 +129,18 @@ export default async function Song({ params }: { params: Promise<{ songId: strin
 
         <Separator className="my-4" />
         {song.lyrics && (
-          <>
+          <div className="flex w-full flex-col">
             <h3 className="text-xl">{TRANSLATIONS.pt.lyrics}</h3>
-            <p className="whitespace-pre text-sm">{song.lyrics}</p>
+            <p className="whitespace-pre text-wrap break-normal text-sm">{song.lyrics}</p>
             <Separator className="my-4" />
-          </>
+          </div>
         )}
         {song.details && (
-          <>
+          <div className="flex w-full flex-col">
             <h3 className="text-xl">{TRANSLATIONS.pt.details}</h3>
-            <p className="whitespace-pre text-sm">{song.details}</p>
+            <p className="whitespace-pre text-wrap break-normal text-sm">{song.details}</p>
             <Separator className="my-4" />
-          </>
+          </div>
         )}
       </div>
     </Sheet>
