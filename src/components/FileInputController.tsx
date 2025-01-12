@@ -33,7 +33,7 @@ const FileInputController = ({
     }
   }, [willAddNewFile, fileInputRef.current]);
 
-  return !newFile && !willAddNewFile ? (
+  return !newFile && !willAddNewFile && originalFileName ? (
     <div className="items-left flex flex-col">
       {originalFileName}
       <Button

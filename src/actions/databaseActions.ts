@@ -132,7 +132,7 @@ export const editSong = async (values: {
   authors: OtherAuthorInfo[];
   lyrics?: string;
   details?: string;
-  pdfFileID: string;
+  pdfFileID?: string;
   musescoreFileID?: string;
   audioFileID?: string;
 }) => {

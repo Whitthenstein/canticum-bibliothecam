@@ -125,6 +125,10 @@ export function SongForm({ songInfo }: Props) {
     defaultValues: {
       title: songInfo?.song.title || "",
       subtitle: songInfo?.song.subtitle || "",
+      composers: songInfo?.authors
+        .filter((author) => author.isMusicAuthor)
+        .map((author) => author.name)
+        .join(""),
       lyrics: songInfo?.song.lyrics || "",
       details: songInfo?.song.details || "",
       otherAuthors: isEditingSong
@@ -196,8 +200,12 @@ export function SongForm({ songInfo }: Props) {
     setFileTypesToProcess(new Set());
 
     // setup Dialog Popup
-    const filesToProcess: string[] = [FILE_TYPES.PDF]; // pdf file is mandatory
+    const filesToProcess: string[] = []; // pdf file is mandatory
     const finishedProcessedFiles: string[] = [];
+
+    if (pdfFile) {
+      filesToProcess.push(FILE_TYPES.PDF);
+    }
 
     if (musescoreFile) {
       filesToProcess.push(FILE_TYPES.MUSESCORE);
@@ -212,11 +220,14 @@ export function SongForm({ songInfo }: Props) {
     setOpenedDialog(true);
 
     // create pdf file in GDrive
-    setIsProcessingPdfFile(true);
-    const gDrivePdfFileID = await (pdfFile && createNewFile(pdfFile));
-    setIsProcessingPdfFile(false);
-    finishedProcessedFiles.push(FILE_TYPES.PDF);
-    setFinishedProcessingFileTypes(new Set<string>(finishedProcessedFiles));
+    let gDrivePdfFileID: string | undefined;
+    if (pdfFile) {
+      setIsProcessingPdfFile(true);
+      gDrivePdfFileID = await (pdfFile && createNewFile(pdfFile));
+      setIsProcessingPdfFile(false);
+      finishedProcessedFiles.push(FILE_TYPES.PDF);
+      setFinishedProcessingFileTypes(new Set<string>(finishedProcessedFiles));
+    }
 
     // create musescore file in GDrive if received
     let gDriveMusescoreFileID: string | undefined;
@@ -238,11 +249,6 @@ export function SongForm({ songInfo }: Props) {
       setFinishedProcessingFileTypes(new Set<string>(finishedProcessedFiles));
     }
 
-    if (!gDrivePdfFileID) {
-      console.log("ERROR: no pdfFileID", gDrivePdfFileID);
-      return;
-    }
-
     const songParams = {
       title,
       subtitle,
@@ -251,7 +257,7 @@ export function SongForm({ songInfo }: Props) {
       authors: otherAuthors,
       lyrics: lyrics?.trimEnd(),
       details: details?.trimEnd(),
-      pdfFileID: gDrivePdfFileID,
+      pdfFileID: gDrivePdfFileID!,
       musescoreFileID: gDriveMusescoreFileID,
       audioFileID: gDriveAudioFileID
     };
@@ -273,6 +279,8 @@ export function SongForm({ songInfo }: Props) {
       title: TRANSLATIONS.pt.songAddedTitle,
       description: `${title} ${TRANSLATIONS.pt.songAddedDescription}`
     });
+
+    location.reload();
   };
 
   useEffect(() => {
@@ -282,18 +290,16 @@ export function SongForm({ songInfo }: Props) {
 
     const author = allAuthorsMap[otherAuthorsTags.at(-1)!];
 
-    console.log(allAuthorsMap, otherAuthorsTags);
-
     if (fields.some((field) => field.ID === author.ID)) {
       return;
     }
 
     const authorInfo = { ID: author.ID, name: author.name, credit: "" };
 
-    console.log("here");
-
     append(authorInfo);
   }, [otherAuthorsTags, allAuthorsMap]);
+
+  console.log(composersTags);
 
   return (
     <Form {...form}>
@@ -483,11 +489,12 @@ export function SongForm({ songInfo }: Props) {
             <FormItem>
               <FormLabel>Musescore</FormLabel>
               <FormControl>
-                <Input
-                  {...fieldProps}
-                  type="file"
-                  accept=".mscz"
-                  onChange={(event) => handleOnChangeFile(event, onChange)}
+                <FileInputController
+                  originalFileName={originalFileNames.musescoreFileName}
+                  fileType=".mscz"
+                  fieldProps={fieldProps}
+                  onChange={onChange}
+                  handleOnChangeFile={handleOnChangeFile}
                 />
               </FormControl>
               <FormDescription></FormDescription>
@@ -503,11 +510,12 @@ export function SongForm({ songInfo }: Props) {
             <FormItem>
               <FormLabel>{TRANSLATIONS.pt.audio}</FormLabel>
               <FormControl>
-                <Input
-                  {...fieldProps}
-                  type="file"
-                  accept=".mp3"
-                  onChange={(event) => handleOnChangeFile(event, onChange)}
+                <FileInputController
+                  originalFileName={originalFileNames.audioFileName}
+                  fileType=".mp3"
+                  fieldProps={fieldProps}
+                  onChange={onChange}
+                  handleOnChangeFile={handleOnChangeFile}
                 />
               </FormControl>
               <FormDescription></FormDescription>

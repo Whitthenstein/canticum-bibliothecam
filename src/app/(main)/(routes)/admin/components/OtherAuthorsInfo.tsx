@@ -62,8 +62,6 @@ const OtherAuthorsInfo = ({ fields, otherAuthors, append }: Props) => {
 
     const authorInfo = { ID: author.ID, name: author.name, credit: "" };
 
-    console.log("here");
-
     append(authorInfo);
   }, [otherAuthors]);
 
