@@ -30,7 +30,7 @@ export const getSongsResultsListArray = (songs: SelectSong[]) => {
     }
 
     return (
-      <li key={`${song.ID}-${song.title}`}>
+      <li key={`${song.ID}-${song.title}`} className="py-1">
         <SearchResult urlPath={`/songs/${song.ID}`} text={song.title} Icons={icons} />
       </li>
     );
