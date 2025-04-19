@@ -14,15 +14,15 @@ jobs:
         with:
           node-version: lts/*
       - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+        run: npm install -g npm && npm install
       # - name: Install Turso
       #   run: curl -sSfL https://get.tur.so/install.sh | bash
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        run: npm exec playwright install --with-deps
       - name: Build the app
-        run: pnpm run build
+        run: npm run build
       - name: Run Playwright tests
-        run: pnpm exec playwright test
+        run: npm exec playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
