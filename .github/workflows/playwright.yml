@@ -10,7 +10,7 @@ jobs:
     env: 
       ADMIN_PASSWORD: ${{secrets.ADMIN_PASSWORD}}
       TURSO_DB_TOKEN: ${{secrets.TURSO_DB_TOKEN}}
-      TURSO_DB_CONNECTION_URL: ${{secrets.TURSO_DB_CONNECTION_URL}}
+      TURSO_DB_CONNECTION_URL: file:test.db
       GOOGLE_API_CREDS: ${{secrets.GOOGLE_API_CREDS}}
       GDRIVE_STORAGE_FOLDER_ID: ${{secrets.GDRIVE_STORAGE_FOLDER_ID}}
     timeout-minutes: 60
@@ -22,14 +22,12 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm install -g npm && npm install --force
-      - name: Install Turso
-        run: curl -sSfL https://get.tur.so/install.sh | bash
       - name: Install Playwright Browsers
         run: npm exec playwright install --with-deps
       - name: Build the app
         run: npm run build
       - name: Setup DB
-        run: npm run db:migrate
+        run: sqlite3 test.db ".read ./tests/test.sql" && npm run db:migrate
       - name: Run Playwright tests
         run: npm exec playwright test
       - uses: actions/upload-artifact@v4
