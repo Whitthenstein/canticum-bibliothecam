@@ -10,7 +10,7 @@
     "db:generate-migration": "npx drizzle-kit generate",
     "db:drop-migration": "npx drizzle-kit drop",
     "db:studio": "drizzle-kit studio",
-    "seed": "node src/db/seed.js",
+    "seed": "node tests/seed.js",
     "lint": "next lint"
   },
   "dependencies": {
