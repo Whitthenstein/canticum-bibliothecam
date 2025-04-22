@@ -6,7 +6,7 @@ export default defineConfig({
   dialect: "turso",
   dbCredentials: {
     url: process.env.TURSO_DB_CONNECTION_URL!,
-    authToken: process.env.TURSO_DB_TOKEN
+    authToken: process.env.ENVIRONMENT === "testing" ? undefined : process.env.TURSO_DB_TOKEN
   },
   verbose: true,
   strict: true

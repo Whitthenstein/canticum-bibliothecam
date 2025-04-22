@@ -9,6 +9,7 @@ jobs:
     name: E2E Tests
     env: 
       ADMIN_PASSWORD: ${{secrets.ADMIN_PASSWORD}}
+      TURSO_DB_TOKEN: ${{secrets.TURSO_DB_TOKEN}}
       TURSO_DB_CONNECTION_URL: file:test.db
       GOOGLE_API_CREDS: ${{secrets.GOOGLE_API_CREDS}}
       GDRIVE_STORAGE_FOLDER_ID: ${{secrets.GDRIVE_STORAGE_FOLDER_ID}}
@@ -26,7 +27,7 @@ jobs:
       - name: Build the app
         run: npm run build
       - name: Setup DB
-        run: sqlite3 test.db ".read ./tests/test.sql" && npm run db:migrate
+        run: sqlite3 test.db ".read ./tests/test.sql" && npm run db:migrate:testing
       - name: Run Playwright tests
         run: npm exec playwright test
       - uses: actions/upload-artifact@v4
