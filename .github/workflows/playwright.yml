@@ -6,6 +6,12 @@ on:
     branches: [main, master]
 jobs:
   test:
+    env: 
+      ADMIN_PASSWORD: ${{secrets.ADMIN_PASSWORD}}
+      TURSO_DB_TOKEN: ${{secrets.TURSO_DB_TOKEN}}
+      TURSO_DB_CONNECTION_URL: ${{secrets.TURSO_DB_CONNECTION_URL}}
+      GOOGLE_API_CREDS: ${{secrets.GOOGLE_API_CREDS}}
+      GDRIVE_STORAGE_FOLDER_ID: ${{secrets.GDRIVE_STORAGE_FOLDER_ID}}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
