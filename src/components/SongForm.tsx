@@ -40,10 +40,6 @@ import { AuthorsMap } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import FileInputController from "./FileInputController";
 
-const getFormSchema = (isEditingSong: boolean) => {
-  return 
-};
-
 interface Props {
   songInfo?: { song: SelectSong; authors: SelectAuthorOfSong[] };
 }
