@@ -1,9 +1,9 @@
 import SearchResult from "@/components/SearchResult";
+import {getTranslations} from 'next-intl/server';
 
 import { SelectAuthor, SelectSong } from "@/db/schema";
 
 import { AUTHOR_TYPES_MAP, FILE_TYPES_MAP } from "./constants";
-import { TRANSLATIONS } from "./translations";
 
 export const buildSearchString = (stringChunksArray: string[]) => {
   const searchString = stringChunksArray
@@ -14,19 +14,20 @@ export const buildSearchString = (stringChunksArray: string[]) => {
   return searchString.concat(stringChunksArray.join(" "));
 };
 
-export const getSongsResultsListArray = (songs: SelectSong[]) => {
+export const getSongsResultsListArray = async (songs: SelectSong[]) => {
+  const t = await getTranslations();
   return songs.map((song) => {
-    const icons = [{ Icon: FILE_TYPES_MAP["pdfFile"], iconText: TRANSLATIONS.pt["pdfFile"] }];
+    const icons = [{ Icon: FILE_TYPES_MAP["pdfFile"], iconText: t("pdfFile") }];
 
     if (song.musescoreFile) {
       icons.push({
         Icon: FILE_TYPES_MAP["musescoreFile"],
-        iconText: TRANSLATIONS.pt["musescoreFile"]
+        iconText: t("musescoreFile")
       });
     }
 
     if (song.audioFile) {
-      icons.push({ Icon: FILE_TYPES_MAP["audioFile"], iconText: TRANSLATIONS.pt["audioFile"] });
+      icons.push({ Icon: FILE_TYPES_MAP["audioFile"], iconText: t("audioFile") });
     }
 
     return (
@@ -37,16 +38,17 @@ export const getSongsResultsListArray = (songs: SelectSong[]) => {
   });
 };
 
-export const getAuthorsResultsListArray = (authors: SelectAuthor[]) => {
+export const getAuthorsResultsListArray = async (authors: SelectAuthor[]) => {
+  const t = await getTranslations();
   return authors.map((author) => {
     const Icons = [];
 
     if (author.isComposer) {
-      Icons.push({ Icon: AUTHOR_TYPES_MAP.Composer, iconText: TRANSLATIONS.pt.Composer });
+      Icons.push({ Icon: AUTHOR_TYPES_MAP.Composer, iconText: t("composer") });
     }
 
     if (author.isLyricist) {
-      Icons.push({ Icon: AUTHOR_TYPES_MAP.Lyricist, iconText: TRANSLATIONS.pt.Lyricist });
+      Icons.push({ Icon: AUTHOR_TYPES_MAP.Lyricist, iconText: t("lyricist") });
     }
 
     return (

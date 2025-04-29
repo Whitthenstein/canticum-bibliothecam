@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import {NextIntlClientProvider} from 'next-intl';
+
 import localFont from "next/font/local";
 import "./globals.css";
 import Image from "next/image";
@@ -23,18 +25,23 @@ export const metadata: Metadata = {
   icons: ["/bible.svg"]
 };
 
-export default function RootLayout({
-  children
+export default async function RootLayout({
+  children,
+  params
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{locale: string}>;
 }>) {
+  const {locale} = await params;
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <NextIntlClientProvider>
         <SidebarProvider defaultOpen={true}>
           <AppSidebar />
           <SidebarTrigger />
@@ -57,6 +64,7 @@ export default function RootLayout({
           </div>
         </SidebarProvider>
         <Toaster />
+      </NextIntlClientProvider>
       </body>
     </html>
   );

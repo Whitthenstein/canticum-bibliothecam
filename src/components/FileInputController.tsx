@@ -1,7 +1,8 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import {getTranslations} from 'next-intl/server';
+
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { TRANSLATIONS } from "@/lib/translations";
 
 interface Props {
   originalFileName: string | null | undefined;
@@ -14,13 +15,14 @@ interface Props {
   onChange: (...event: unknown[]) => void;
 }
 
-const FileInputController = ({
+const FileInputController = async ({
   originalFileName,
   fieldProps,
   fileType,
   handleOnChangeFile,
   onChange
 }: Props) => {
+  const t = await getTranslations();
   const [willAddNewFile, setWillAddNewFile] = useState(false);
   const [newFile, setNewFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -44,7 +46,7 @@ const FileInputController = ({
           setWillAddNewFile(true);
         }}
       >
-        {TRANSLATIONS.pt.addNew}
+        {t("addNew")}
       </Button>
     </div>
   ) : (

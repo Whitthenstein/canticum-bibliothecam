@@ -1,20 +1,23 @@
 "use client";
 
+import {useTranslations} from 'next-intl';
+import { useState } from "react";
+import { Eye, EyeClosed } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AuthorForm } from "../../../../components/AuthorForm";
-import { SongForm } from "../../../../components/SongForm";
-import { TRANSLATIONS } from "@/lib/translations";
+
+import { AuthorForm } from "@/components/AuthorForm";
+import { SongForm } from "@/components/SongForm";
 import useAdminLogin from "@/hooks/useAdminLogin";
+import AnimatedLoadingCircle from "@/components/AnimatedLoadingCircle";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import AnimatedLoadingCircle from "@/components/AnimatedLoadingCircle";
 
-import { Eye, EyeClosed } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 export default function Admin() {
+  const t = useTranslations();
   const [isSubmittingPassword, setIsSubmittingPassword] = useState(false);
   const [inputtedPassword, setInputtedPassword] = useState("");
   const { isAuthenticated, submitPasswordAndCheck } = useAdminLogin();
@@ -53,7 +56,7 @@ export default function Admin() {
         </div>
         <div>
           <Button className="flex items-center justify-center" onClick={handleSubmitClick}>
-            {isSubmittingPassword ? <AnimatedLoadingCircle /> : TRANSLATIONS.pt.submit}
+            {isSubmittingPassword ? <AnimatedLoadingCircle /> : t("submit")}
           </Button>
         </div>
       </CardContent>
@@ -62,13 +65,13 @@ export default function Admin() {
     <div className="flex flex-row gap-20 p-8">
       <Tabs defaultValue="add-author" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="add-author">{TRANSLATIONS.pt.addAuthor}</TabsTrigger>
-          <TabsTrigger value="add-song">{TRANSLATIONS.pt.addSong}</TabsTrigger>
+          <TabsTrigger value="add-author">{t("addAuthor")}</TabsTrigger>
+          <TabsTrigger value="add-song">{t("addSong")}</TabsTrigger>
         </TabsList>
         <TabsContent value="add-author">
           <Card>
             <CardHeader>
-              <CardTitle>{TRANSLATIONS.pt.author}</CardTitle>
+              <CardTitle>{t("author")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <AuthorForm />
@@ -78,7 +81,7 @@ export default function Admin() {
         <TabsContent value="add-song">
           <Card>
             <CardHeader>
-              <CardTitle>{TRANSLATIONS.pt.song}</CardTitle>
+              <CardTitle>{t("song")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <SongForm />

@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+import {useTranslations} from 'next-intl';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { SelectTagInput } from "@/components/ui/select-tag-input";
 import {
   Dialog,
@@ -26,13 +27,12 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import UploadProcessComponent from "../app/(main)/(routes)/admin/components/UploadProcessComponent";
+import UploadProcessComponent from "@/components/UploadProcessComponent";
 
 import { addSong, editSong, getAuthors } from "@/actions/databaseActions";
 import { createNewFile, getFileNames } from "@/actions/gDriveActions";
 import { SelectAuthor, SelectAuthorOfSong, SelectSong } from "@/db/schema";
 
-import { TRANSLATIONS } from "@/lib/translations";
 import { FILE_TYPES, FILE_TYPES_MAP } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
 
@@ -41,35 +41,7 @@ import { Card } from "@/components/ui/card";
 import FileInputController from "./FileInputController";
 
 const getFormSchema = (isEditingSong: boolean) => {
-  return z.object({
-    title: z.string().trim().min(2, {
-      message: TRANSLATIONS.pt.songTitleWarning
-    }),
-    subtitle: z.string().trim().optional(),
-    composers: z.string().min(1, TRANSLATIONS.pt.songComposersWarning),
-    lyricists: z.string().optional(),
-    otherAuthors: z.array(
-      z.object({
-        ID: z.string(),
-        name: z.string(),
-        credit: z.string().min(1, TRANSLATIONS.pt.otherAuthorCreditWarning)
-      })
-    ),
-    lyrics: z.string().optional(),
-    details: z.string().optional(),
-    pdfFile: isEditingSong
-      ? z.instanceof(File, { message: TRANSLATIONS.pt.songPdfFileWarning }).optional()
-      : z.instanceof(File, { message: TRANSLATIONS.pt.songPdfFileWarning }),
-    // .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
-    musescoreFile: z
-      .instanceof(File)
-      .refine((file) => file?.name.includes(".mscz"))
-      .optional(),
-    audioFile: z
-      .instanceof(File)
-      .refine((file) => file?.name.includes(".mp3"))
-      .optional()
-  });
+  return 
 };
 
 interface Props {
@@ -77,6 +49,7 @@ interface Props {
 }
 
 export function SongForm({ songInfo }: Props) {
+  const t = useTranslations();
   const { toast } = useToast();
   const [openedDialog, setOpenedDialog] = useState(false);
   const [shouldCloseDialog, setShouldCloseDialog] = useState(false);
@@ -118,7 +91,37 @@ export function SongForm({ songInfo }: Props) {
 
   const isEditingSong = !!songInfo;
 
-  const formSchema = getFormSchema(isEditingSong);
+  const formSchema = useMemo(() => {
+    return z.object({
+      title: z.string().trim().min(2, {
+        message: t("songTitleWarning")
+      }),
+      subtitle: z.string().trim().optional(),
+      composers: z.string().min(1, t("songComposersWarning")),
+      lyricists: z.string().optional(),
+      otherAuthors: z.array(
+        z.object({
+          ID: z.string(),
+          name: z.string(),
+          credit: z.string().min(1, t("otherAuthorCreditWarning"))
+        })
+      ),
+      lyrics: z.string().optional(),
+      details: z.string().optional(),
+      pdfFile: isEditingSong
+        ? z.instanceof(File, { message: t("songPdfFileWarning") }).optional()
+        : z.instanceof(File, { message: t("songPdfFileWarning") }),
+      // .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+      musescoreFile: z
+        .instanceof(File)
+        .refine((file) => file?.name.includes(".mscz"))
+        .optional(),
+      audioFile: z
+        .instanceof(File)
+        .refine((file) => file?.name.includes(".mp3"))
+        .optional()
+    });
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -276,8 +279,8 @@ export function SongForm({ songInfo }: Props) {
 
     setShouldCloseDialog(true);
     toast({
-      title: TRANSLATIONS.pt.songAddedTitle,
-      description: `${title} ${TRANSLATIONS.pt.songAddedDescription}`
+      title: t("songAddedTitle"),
+      description: `${title} ${t("songAddedDescription")}`
     });
 
     location.reload();
@@ -309,7 +312,7 @@ export function SongForm({ songInfo }: Props) {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`${TRANSLATIONS.pt.title} *`}</FormLabel>
+              <FormLabel>{`${t("title")} *`}</FormLabel>
               <FormControl>
                 <Input placeholder="Chama Viva" {...field} />
               </FormControl>
@@ -323,7 +326,7 @@ export function SongForm({ songInfo }: Props) {
           name="subtitle"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{TRANSLATIONS.pt.subtitle}</FormLabel>
+              <FormLabel>{t("subtitle")}</FormLabel>
               <FormControl>
                 <Input placeholder="Comunhão | XXII Domingo Tempo Comum" {...field} />
               </FormControl>
@@ -338,7 +341,7 @@ export function SongForm({ songInfo }: Props) {
           name="composers"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`${TRANSLATIONS.pt.composer_s} *`}</FormLabel>
+              <FormLabel>{`${t("composer_s")} *`}</FormLabel>
               <FormControl>
                 <SelectTagInput
                   {...field}
@@ -347,7 +350,7 @@ export function SongForm({ songInfo }: Props) {
                     setComposersTags(values);
                     field.onChange(values.length === 0 ? "" : values.toLocaleString());
                   }}
-                  placeholder={TRANSLATIONS.pt.writeNameToSelect}
+                  placeholder={t("writeNameToSelect")}
                   options={allComposers.map((author) => ({
                     label: `${author.name}`,
                     value: String(author.ID)
@@ -364,13 +367,13 @@ export function SongForm({ songInfo }: Props) {
           name="lyricists"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{TRANSLATIONS.pt.lyricist_s}</FormLabel>
+              <FormLabel>{t("lyricist_s")}</FormLabel>
               <FormControl>
                 <SelectTagInput
                   {...field}
                   value={lyricistsTags}
                   onChange={setLyricistsTags}
-                  placeholder={TRANSLATIONS.pt.writeNameToSelect}
+                  placeholder={t("writeNameToSelect")}
                   options={allLyricists.map((author) => ({
                     label: `${author.name}`,
                     value: String(author.ID)
@@ -387,7 +390,7 @@ export function SongForm({ songInfo }: Props) {
           name="otherAuthors"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{TRANSLATIONS.pt.otherAuthors}</FormLabel>
+              <FormLabel>{t("otherAuthors")}</FormLabel>
               <FormControl>
                 {fields.length !== 0 && (
                   <Card className="flex flex-col gap-2 p-4">
@@ -419,7 +422,7 @@ export function SongForm({ songInfo }: Props) {
                 {...field}
                 value={[]}
                 onChange={setOtherAuthorsTags}
-                placeholder={TRANSLATIONS.pt.writeNameToSelect}
+                placeholder={t("writeNameToSelect")}
                 options={allAuthorsArray.map((author) => ({
                   label: `${author.name}`,
                   value: author.ID
@@ -451,7 +454,7 @@ export function SongForm({ songInfo }: Props) {
           name="details"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{TRANSLATIONS.pt.details}</FormLabel>
+              <FormLabel>{t("details")}</FormLabel>
               <FormControl>
                 <Textarea className="resize-none" {...field} />
               </FormControl>
@@ -508,7 +511,7 @@ export function SongForm({ songInfo }: Props) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render={({ field: { value, onChange, ...fieldProps } }) => (
             <FormItem>
-              <FormLabel>{TRANSLATIONS.pt.audio}</FormLabel>
+              <FormLabel>{t("audio")}</FormLabel>
               <FormControl>
                 <FileInputController
                   originalFileName={originalFileNames.audioFileName}
@@ -526,7 +529,7 @@ export function SongForm({ songInfo }: Props) {
 
         <Dialog open={openedDialog}>
           <DialogTrigger asChild>
-            <Button type="submit">{TRANSLATIONS.pt.submit}</Button>
+            <Button type="submit">{t("submit")}</Button>
           </DialogTrigger>
           <DialogContent
             automaticClose={true}
@@ -534,8 +537,8 @@ export function SongForm({ songInfo }: Props) {
             onClose={() => setOpenedDialog(false)}
           >
             <DialogHeader>
-              <DialogTitle>{TRANSLATIONS.pt.savingSong}</DialogTitle>
-              <DialogDescription>{`${TRANSLATIONS.pt.waitForProcesses}:`}</DialogDescription>
+              <DialogTitle>{t("savingSong")}</DialogTitle>
+              <DialogDescription>{`${t("waitForProcesses")}:`}</DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-2">
               {fileTypesToProcess.has(FILE_TYPES.PDF) && (
@@ -549,7 +552,7 @@ export function SongForm({ songInfo }: Props) {
                     isFinished={
                       !isProcessingPdfFile && finishedProcessingFileTypes.has(FILE_TYPES.PDF)
                     }
-                    text={TRANSLATIONS.pt.savingPdfFile}
+                    text={t("savingPdfFile")}
                   />
                 </div>
               )}
@@ -566,7 +569,7 @@ export function SongForm({ songInfo }: Props) {
                       !isProcessingMusescoreFile &&
                       finishedProcessingFileTypes.has(FILE_TYPES.MUSESCORE)
                     }
-                    text={TRANSLATIONS.pt.savingMusescoreFile}
+                    text={t("savingMusescoreFile")}
                   />
                 </div>
               )}
@@ -581,18 +584,18 @@ export function SongForm({ songInfo }: Props) {
                     isFinished={
                       !isProcessingAudioFile && finishedProcessingFileTypes.has(FILE_TYPES.AUDIO)
                     }
-                    text={TRANSLATIONS.pt.savingAudioFile}
+                    text={t("savingAudioFile")}
                   />
                 </div>
               )}
               {/* Process Component for Song storing in Database */}
               <div className="flex flex-row items-center gap-2">
-                {`${TRANSLATIONS.pt.song}: `}
+                {`${t("song")}: `}
                 <UploadProcessComponent
                   isWaiting={!isProcessingSong && !finishedProcessingSong}
                   isProcessing={isProcessingSong}
                   isFinished={!isProcessingSong && finishedProcessingSong}
-                  text={TRANSLATIONS.pt.savingSongInDatabase}
+                  text={t("savingSongInDatabase")}
                 />
               </div>
             </div>

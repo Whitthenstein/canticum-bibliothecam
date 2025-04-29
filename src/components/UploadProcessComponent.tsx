@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
+import {getTranslations} from 'next-intl/server';
 import { Check, Pause } from "lucide-react";
+
 import { cn } from "@/lib/utils";
-import { TRANSLATIONS } from "@/lib/translations";
 import AnimatedLoadingCircle from "@/components/AnimatedLoadingCircle";
 
 interface UploadProcessComponentProps {
@@ -12,16 +13,19 @@ interface UploadProcessComponentProps {
   text: string;
 }
 
-const UploadProcessComponent = ({
+const UploadProcessComponent = async ({
   isWaiting,
   isProcessing,
   isFinished,
   text
 }: UploadProcessComponentProps) => {
+  const t = await getTranslations();
+
+
   const textToShow = isWaiting
-    ? TRANSLATIONS.pt.waiting
+    ? t("waiting")
     : isFinished
-      ? TRANSLATIONS.pt.success
+      ? t("success")
       : text;
   const cursorStyling = isWaiting || isProcessing ? "cursor-wait" : "cursor-default";
 

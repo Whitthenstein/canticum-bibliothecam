@@ -4,11 +4,13 @@ import EditTrigger from "@/components/EditTrigger";
 import { Separator } from "@/components/ui/separator";
 import { Sheet } from "@/components/ui/sheet";
 import { FILE_TYPES, FILE_TYPES_MAP } from "@/lib/constants";
-import { TRANSLATIONS } from "@/lib/translations";
+import {getTranslations} from 'next-intl/server';
+
 import Link from "next/link";
 import { ReactNode } from "react";
 
 export default async function Song({ params }: { params: Promise<{ songId: string }> }) {
+  const t = await getTranslations();
   const { songId } = await params;
   const song = await getSongById({ songId: songId });
   const songAuthors = await getSongAuthorsBySongID({ songId: songId });
@@ -62,7 +64,7 @@ export default async function Song({ params }: { params: Promise<{ songId: strin
           <div className="flex w-full flex-col gap-0">
             <div className="flex w-full flex-row justify-end">
               <p className="text-sm">
-                {`${TRANSLATIONS.pt.song}: `}
+                {`${song}: `}
                 {composers.length === 1 ? (
                   <Link href={`/authors/${composers[0].ID}`}>{composers[0].name}</Link>
                 ) : (
@@ -80,7 +82,7 @@ export default async function Song({ params }: { params: Promise<{ songId: strin
             {lyricists.length > 0 && (
               <div className="flex w-full flex-row justify-end">
                 <p className="text-sm">
-                  {`${TRANSLATIONS.pt.lyrics}: `}
+                  {`${t("lyrics")}: `}
                   {lyricists.length === 1 ? (
                     <Link href={`/authors/${lyricists[0].ID}`}>{lyricists[0].name}</Link>
                   ) : (
@@ -130,14 +132,14 @@ export default async function Song({ params }: { params: Promise<{ songId: strin
         <Separator className="my-4" />
         {song.lyrics && (
           <div className="flex w-full flex-col">
-            <h3 className="text-xl">{TRANSLATIONS.pt.lyrics}</h3>
+            <h3 className="text-xl">{t("lyrics")}</h3>
             <p className="whitespace-pre text-wrap break-normal text-sm">{song.lyrics}</p>
             <Separator className="my-4" />
           </div>
         )}
         {song.details && (
           <div className="flex w-full flex-col">
-            <h3 className="text-xl">{TRANSLATIONS.pt.details}</h3>
+            <h3 className="text-xl">{t("details")}</h3>
             <p className="whitespace-pre text-wrap break-normal text-sm">{song.details}</p>
             <Separator className="my-4" />
           </div>

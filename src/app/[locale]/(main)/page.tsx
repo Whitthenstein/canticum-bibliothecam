@@ -1,11 +1,10 @@
 import React from "react";
-
-import { getAuthorsWithQuery, getSongsWithQuery } from "@/actions/databaseActions";
+import {getTranslations} from 'next-intl/server';
 
 import SearchBox from "@/components/SearchBox";
 
+import { getAuthorsWithQuery, getSongsWithQuery } from "@/actions/databaseActions";
 import { getAuthorsResultsListArray, getSongsResultsListArray } from "@/lib/helperFunctions";
-import { TRANSLATIONS } from "@/lib/translations";
 
 export default async function Home(props: {
   searchParams?: Promise<{
@@ -13,6 +12,7 @@ export default async function Home(props: {
     page?: string;
   }>;
 }) {
+  const t = await getTranslations();
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   // const currentPage = Number(searchParams?.page) || 1;
@@ -22,11 +22,11 @@ export default async function Home(props: {
 
   return (
     <div className="flex w-full flex-col items-center justify-center py-14">
-      <SearchBox placeholder={TRANSLATIONS.pt.searchAuthorsAndSongs} />
+      <SearchBox placeholder={t("searchAuthorsAndSongs")} />
       {query && (
         <ul className="w-full items-center justify-center py-6">
-          {getSongsResultsListArray(songs)}
-          {getAuthorsResultsListArray(authors)}
+          {await getSongsResultsListArray(songs)}
+          {await getAuthorsResultsListArray(authors)}
         </ul>
       )}
     </div>

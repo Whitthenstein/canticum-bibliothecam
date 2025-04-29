@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import {useTranslations} from 'next-intl';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -22,30 +23,30 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AUTHOR_TYPES, SelectAuthor } from "@/db/schema";
 import { getValues } from "@/lib/enum";
 import { Textarea } from "@/components/ui/textarea";
-import { TRANSLATIONS } from "@/lib/translations";
 import { addAuthor, editAuthor } from "@/actions/databaseActions";
 import { useState } from "react";
 import AnimatedLoadingCircle from "@/components/AnimatedLoadingCircle";
-
-const formSchema = z.object({
-  name: z.string().trim().min(2, {
-    message: TRANSLATIONS.pt.authorNameWarning
-  }),
-  authorTypes: z
-    .array(z.enum(getValues(AUTHOR_TYPES)))
-    .refine((value) => value.some((item) => item), {
-      message: TRANSLATIONS.pt.authorTypeSelectionWarning
-    }),
-  biography: z.string().trim()
-});
 
 interface Props {
   author?: SelectAuthor;
 }
 
 export const AuthorForm = ({ author }: Props) => {
+  const t = useTranslations();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const formSchema = z.object({
+    name: z.string().trim().min(2, {
+      message: t("authorNameWarning")
+    }),
+    authorTypes: z
+      .array(z.enum(getValues(AUTHOR_TYPES)))
+      .refine((value) => value.some((item) => item), {
+        message: t("authorTypeSelectionWarning")
+      }),
+    biography: z.string().trim()
+  });
 
   const defaultAuthorTypes: AUTHOR_TYPES[] = [];
 
@@ -84,16 +85,16 @@ export const AuthorForm = ({ author }: Props) => {
     if (!author) {
       await addAuthor(newAuthor);
       toast({
-        title: TRANSLATIONS.pt.authorAddedTitle,
-        description: `${name} ${TRANSLATIONS.pt.authorAddedDescription}.`
+        title: t("authorAddedTitle"),
+        description: `${name} ${t("authorAddedDescription")}.`
       });
       form.reset();
       setIsSubmitting(false);
     } else {
       await editAuthor({ ...newAuthor, ID: author.ID });
       toast({
-        title: TRANSLATIONS.pt.authorEditedTitle,
-        description: `${name} ${TRANSLATIONS.pt.authorEditedDescription}.`
+        title: t("authorEditedTitle"),
+        description: `${name} ${t("authorEditedDescription")}.`
       });
       setIsSubmitting(false);
       location.reload();
@@ -108,7 +109,7 @@ export const AuthorForm = ({ author }: Props) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`${TRANSLATIONS.pt.name} *`}</FormLabel>
+              <FormLabel>{`${name} *`}</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="António Cartageno" />
               </FormControl>
@@ -122,7 +123,7 @@ export const AuthorForm = ({ author }: Props) => {
           name="authorTypes"
           render={() => (
             <FormItem>
-              <FormLabel>{`${TRANSLATIONS.pt.authorType} *`}</FormLabel>
+              <FormLabel>{`${t("authorType")} *`}</FormLabel>
               {getValues(AUTHOR_TYPES).map((type, index) => (
                 <FormField
                   key={`${type}-${index}`}
@@ -145,7 +146,7 @@ export const AuthorForm = ({ author }: Props) => {
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {TRANSLATIONS.pt[type]}
+                          {t("type")}
                         </FormLabel>
                       </FormItem>
                     );
@@ -162,7 +163,7 @@ export const AuthorForm = ({ author }: Props) => {
           name="biography"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{TRANSLATIONS.pt.biography}</FormLabel>
+              <FormLabel>{t("biography")}</FormLabel>
               <FormControl>
                 <Textarea className="resize-none" {...field} />
               </FormControl>
@@ -171,7 +172,7 @@ export const AuthorForm = ({ author }: Props) => {
           )}
         />
         <Button className="flex items-center justify-center" type="submit">
-          {isSubmitting ? <AnimatedLoadingCircle /> : TRANSLATIONS.pt.submit}
+          {isSubmitting ? <AnimatedLoadingCircle /> : t("submit")}
         </Button>
       </form>
     </Form>

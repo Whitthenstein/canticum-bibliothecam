@@ -5,25 +5,26 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet } from "@/components/ui/sheet";
 import { AUTHOR_TYPES } from "@/db/schema";
 import { getSongsResultsListArray } from "@/lib/helperFunctions";
-import { TRANSLATIONS } from "@/lib/translations";
+import {getTranslations} from 'next-intl/server';
 
 export default async function Author({ params }: { params: Promise<{ authorId: string }> }) {
+  const t = await getTranslations();
   const { authorId } = await params;
   const author = await getAuthorByID({ authorID: authorId });
   const authorSongs = await getSongsByAuthorID({ authorID: authorId });
 
   const authorTypes: string[] = [];
   if (author.isComposer) {
-    authorTypes.push(TRANSLATIONS.pt[AUTHOR_TYPES.COMPOSER]);
+    authorTypes.push(t(`${AUTHOR_TYPES.COMPOSER.toLowerCase()}`));
   }
   if (author.isLyricist) {
-    authorTypes.push(TRANSLATIONS.pt[AUTHOR_TYPES.LYRICIST]);
+    authorTypes.push(t(`${AUTHOR_TYPES.LYRICIST.toLowerCase()}`));
   }
 
   const authorTypeInfo =
     authorTypes.length === 1
       ? authorTypes[0]
-      : `${authorTypes[0]} ${TRANSLATIONS.pt.and} ${authorTypes[1]}`;
+      : `${authorTypes[0]} ${t("and")} ${authorTypes[1]}`;
 
   return (
     <Sheet>
@@ -37,20 +38,20 @@ export default async function Author({ params }: { params: Promise<{ authorId: s
         <Separator className="my-4" />
         {author.biography && (
           <div className="flex w-full flex-col">
-            <h3 className="text-xl">{TRANSLATIONS.pt.biography}</h3>
+            <h3 className="text-xl">{t("biography")}</h3>
             <p className="whitespace-pre text-wrap break-normal text-sm">{author.biography}</p>
             <Separator className="my-4" />
           </div>
         )}
         {/* {author} */}
-        <h3 className="text-xl">{TRANSLATIONS.pt.songs}</h3>
+        <h3 className="text-xl">{t("songs")}</h3>
         {/* NO SONGS */}
-        {authorSongs.length === 0 && <p className="text-sm">{TRANSLATIONS.pt.authorHasNoSongs}</p>}
+        {authorSongs.length === 0 && <p className="text-sm">{t("authorHasNoSongs")}</p>}
 
         {/* HAS SONGS */}
         {authorSongs.length >= 1 && (
           <ul className="w-full items-center justify-center py-6">
-            {getSongsResultsListArray(authorSongs)}
+            {await getSongsResultsListArray(authorSongs)}
           </ul>
         )}
       </div>

@@ -1,4 +1,6 @@
 import { /*Calendar,*/ Home, LibraryBig, /*Settings,*/ UsersRound, Key } from "lucide-react";
+import {getTranslations} from 'next-intl/server';
+
 
 import {
   Sidebar,
@@ -10,22 +12,24 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { TRANSLATIONS } from "@/lib/translations";
 
-// Menu items.
+export async function AppSidebar() {
+  const t = await getTranslations();
+
+  // Menu items.
 const items = [
   {
-    title: TRANSLATIONS.pt.home,
+    title: t("home"),
     url: "/",
     icon: Home
   },
   {
-    title: TRANSLATIONS.pt.authors,
+    title: t("authors"),
     url: "/authors",
     icon: UsersRound
   },
   {
-    title: TRANSLATIONS.pt.songs,
+    title: t("songs"),
     url: "/songs",
     icon: LibraryBig
   },
@@ -35,18 +39,17 @@ const items = [
   //   icon: Calendar
   // },
   {
-    title: TRANSLATIONS.pt.admin,
+    title: t("admin"),
     url: "/admin",
     icon: Key
   }
   // {
-  //   title: TRANSLATIONS.pt.settings,
+  //   title: settings,
   //   url: "#",
   //   icon: Settings
   // }
 ];
 
-export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
