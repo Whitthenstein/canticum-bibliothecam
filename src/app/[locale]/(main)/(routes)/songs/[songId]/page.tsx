@@ -64,7 +64,7 @@ export default async function Song({ params }: { params: Promise<{ songId: strin
           <div className="flex w-full flex-col gap-0">
             <div className="flex w-full flex-row justify-end">
               <p className="text-sm">
-                {`${song}: `}
+                {`${t("song")}: `}
                 {composers.length === 1 ? (
                   <Link href={`/authors/${composers[0].ID}`}>{composers[0].name}</Link>
                 ) : (
