@@ -5,6 +5,7 @@ import {getTranslations} from 'next-intl/server';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -12,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 export async function AppSidebar() {
   const t = await getTranslations();
@@ -71,6 +73,9 @@ const items = [
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <LocaleSwitcher />
+      </SidebarFooter>
     </Sidebar>
   );
 }

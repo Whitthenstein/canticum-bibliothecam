@@ -58,5 +58,10 @@
   "savingPdfFile": "A guardar ficheiro Pdf...",
   "savingMusescoreFile": "A guardar ficheiro Musescore...",
   "savingAudioFile": "A guardar ficheiro audio...",
-  "savingSongInDatabase": "A guardar música na base de dados..."
+  "savingSongInDatabase": "A guardar música na base de dados...",
+
+  "LocaleSwitcher": {
+    "locale": "{locale, select, pt {🇵🇹 Português} en {🇺🇸 Inglês} other {Unknown}}",
+    "label": "Mudar o idioma"
+  }
 }
