@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "rm": "rm -rf .next && rm -rf node_modules",
     "db:migrate": "npx drizzle-kit migrate",
     "db:migrate:testing": "ENVIRONMENT=testing && npx drizzle-kit migrate",
     "db:generate-migration": "npx drizzle-kit generate",
