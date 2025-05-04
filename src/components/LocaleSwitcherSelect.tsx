@@ -1,16 +1,15 @@
 'use client';
 
-import clsx from 'clsx';
 import {useParams} from 'next/navigation';
-import {Locale, useLocale, useTranslations} from 'next-intl';
-import {ChangeEvent, ReactNode, useTransition} from 'react';
+import {Locale, useLocale} from 'next-intl';
+import {ReactNode, useTransition} from 'react';
 import {usePathname, useRouter} from '@/i18n/navigation';
-import { DropdownMenu, DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
-import { DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
+import { DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Button } from './ui/button';
-import { Globe } from 'lucide-react';
+import { Globe, LoaderCircle } from 'lucide-react';
 
-type Props = {
+interface Props {
   children: ReactNode;
   defaultValue: string;
   label: string;
@@ -18,7 +17,6 @@ type Props = {
 
 export default function LocaleSwitcherSelect({
   children,
-  defaultValue,
   label
 }: Props) {
   const locale = useLocale();
@@ -41,16 +39,16 @@ export default function LocaleSwitcherSelect({
     });
   }
 
-  function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    
-  }
-
   return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
-            <Globe />
-            {label}
+            {isPending ? <LoaderCircle className='animate-spin'/> : (
+              <>
+                <Globe />
+                {label}
+              </>)
+            }
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
