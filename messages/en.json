@@ -21,6 +21,9 @@
   "lyrics": "Lyrics",
   "settings": "Settings",
   "admin": "Admin",
+  "helloAdmin": "Olá Administrador!",
+  "incorrectPassword": "Password incorrecta! Tente novamente.",
+
   "details": "Details",
   "audio": "Audio",
 

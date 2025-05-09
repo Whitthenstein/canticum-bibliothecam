@@ -30,8 +30,8 @@ export default function Admin() {
 
     toast(
       isCorrectPassword
-        ? { title: "Olá Administrador!" }
-        : { variant: "destructive", title: "Password incorrecta! Tente novamente." }
+        ? { title: t("helloAdmin") }
+        : { variant: "destructive", title: t("incorrectPassword") }
     );
 
     setIsSubmittingPassword(false);
@@ -40,7 +40,7 @@ export default function Admin() {
   return !isAuthenticated ? (
     <Card>
       <CardHeader className="flex items-center">
-        <CardTitle>Administrador</CardTitle>
+        <CardTitle>{t("admin")}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-8">
         <div className="flex flex-row items-center gap-4">
